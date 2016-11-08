@@ -10,7 +10,7 @@ router.get('/lugar', ctrlLugares.infoLugar);
 router.get('/lugar/notas/nueva', ctrlLugares.addNota);
 
 /* Other pages */
-router.get('/acercade', ctrlOtros.acercade);
+router.get('/nosotros', ctrlOtros.nosotros);
 
 
 module.exports = router;

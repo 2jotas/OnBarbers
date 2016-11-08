@@ -1,4 +1,4 @@
 /* GET 'acerca de' page */
-module.exports.acercade = function(req, res){
-  res.render('index', { title: 'Acerca de' });
+module.exports.nosotros = function(req, res){
+  res.render('generica', { title: 'Nosotros' });
 };

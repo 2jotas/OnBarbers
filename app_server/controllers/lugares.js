@@ -7,10 +7,10 @@ module.exports.inicioLista = function(req, res){
 
 /* GET 'info del lugar' page */
 module.exports.infoLugar = function(req, res){
-  res.render('index', { title: 'Notas del sitio' });
+  res.render('info-lugar', { title: 'Notas del sitio' });
 };
 
 /* GET 'agregar una nota del sitio' page */
 module.exports.addNota = function(req, res){
-  res.render('index', { title: 'Agregar una nota' });
+  res.render('form-info-lugar', { title: 'Agregar una nota' });
 };
