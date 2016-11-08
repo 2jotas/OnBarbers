@@ -1,0 +1,161 @@
+1. $ express
+2. $ npm install
+
+3. //crear el archivo Procfile con la línea:
+web: npm start 
+
+4. Modificar el package.json y agregar engines con las versiones de node y npm
+
+5. mapear las urls con las screens que va a tener la app
+
+Collections   |             Screen            |    URL path
+--------------|-------------------------------|-------------------
+Lugares       |Lista de lugares (homepage)    |  /
+Lugares       |Detalles del lugar             |  /lugar
+Lugares       |Formulario de notas del lugar  |  /lugar/notas/nueva
+Otros         |Acerca de OnBarbers            |  /acercade
+
+6. Cambiar la estructura de directorios para cambiar un poco el modelo MVC:
+  -crear en la raíz un dir app_server/
+  -mover los dirs routes/ y views/ dentro de app_server/
+  -crear dentro de app_server/ dos dirs llamados: models/ y controllers/
+
+//Con los cambios de dirs, hay que modificar unas líneas de código para que
+//express entienda cómo va a funcionar:
+
+7. Modificar app_server/routes/index.js para crear dos controladores nuevos:
+  -lugares.js
+  -otros.js
+
+  El archivo /app.js debe contener l nueva ubicación de app_server/routes/index.js y
+  users.js ubicado en el mismo dir de routes/ por eso se debe modificar las líneas
+  de código que tengan esto:
+  var index = require('./app_server/routes/index');
+  var users = require('./app_server/routes/users');
+  app.set('views', path.join(__dirname, 'app_server', 'views'));
+
+8. El archivo app_server/routes/index.js también deberá tener las routes a las
+cuatro pantallas de la tabla anterior; agregar el código:
+
+/* Locations pages */
+router.get('/', ctrlLocations.homelist);
+router.get('/location', ctrlLocations.locationInfo);
+router.get('/location/review/new', ctrlLocations.addReview);
+
+/* Other pages */
+router.get('/about', ctrlOthers.about);
+
+9. Crear un archivo llamado app_server/controllers/otros.js que deberá tener
+el siguiente código:
+
+/* GET 'acerca de' page */
+module.exports.acercade = function(req, res){
+  res.render('index', { title: 'Acerca de' });
+};
+
+10. El punto anterior creo el controlador otros.js para la colección "Otros" y como son dos colecciones, debe haber otro archivo llamado lugares.js que contenga las
+instrucciones:
+
+/* GET 'inicio' page */
+module.exports.inicioLista = function(req, res){
+  res.render('index', { title: 'Inicio' });
+};
+
+/* GET 'info del lugar' page */
+module.exports.infoLugar = function(req, res){
+  res.render('index', { title: 'Notas del sitio' });
+};
+
+/* GET 'agregar una nota del sitio' page */
+module.exports.addNota = function(req, res){
+  res.render('index', { title: 'Agregar una nota' });
+};
+
+11. Si todo ha salido bien, en la raíz de BarbersOn iniciar el nodemon y probar las
+siguientes urls:
+
+y se abren 4 urls:
+localhost:3000/acercade
+localhost:3000/
+localhost:3000/lugar
+localhost:3000/lugar/notas/nueva
+
+
+---------------------------------------------------------------------
+---------------------- Modificando Views-----------------------------
+Es muy importante la identación en jade
+
+En la carpeta public, pegar el bootstrap y el amelia.bootstrap para referenciarlos
+en layout.jade. El jQuery iría dentro de javascripts.
+
+El archivo public/stylesheets/style debe ir en blanco y se hace copia del que
+había.
+
+1. Modificar el archivo app_server/views/layout.jade y agregar un meta
+justo debajo del head, también agregar los enlaces a bootstrap amelia:
+
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='/bootstrap/css/amelia.bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+*Justo debajo del body, identado, va lo siguiente:
+
+body
+  .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') Loc8r
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar-main.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li
+               a(href='/about/') About
+    .container
+      block content
+
+*Justo debajo del block content, identado dentro de, va el footer y la referencia
+a los scripts:
+
+footer
+        .row
+          .col-xs-12
+
+            small &copy; imon Holmes 2014
+    script(src='/javascripts/jquery-1.12.4.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+
+-----------------------------------------------------------------
+------------------------ Página Inicio---------------------------
+
+Lo quedebe mostrar la página de inicio es una lista de lugares, cada lugar deberá
+tener:
+
+*nombre
+*dirección
+*distancia
+*notas
+*detalles
+
+-------------------------
+Navigation bar
+-------------------------
+Header
+-------------------------
+Nombre * *         7km
+Dirección
+Detalles
+-------------------------
+Nombre * *         17km
+Dirección
+Detalles
+-------------------------
+Footer
+-------------------------
+
+1. Configurando la view y el controlador
+
+crear un nuevo archivo y linkearlo al controlador en app_server/views hacer
+una copia de index.jade view y guardarla con el nombre lista-lugares.jade
