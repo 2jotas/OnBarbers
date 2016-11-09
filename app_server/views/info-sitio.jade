@@ -1,0 +1,64 @@
+extends layout
+
+include _includes/sharedHTMLfunctions
+
+block content
+  .row.page-header
+    .col-lg-12
+      h1= pageHeader.title
+  .row
+    .col-xs-12.col-md-9
+      .row
+        .col-xs-12.col-sm-6
+          p.rating
+            +outputRating(negocios.rating)
+          p= negocios.direccion
+          p= negocios.telefono
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Horario atención
+            .panel-body
+              each hora in negocios.horarios
+                p
+                  | #{hora.dias} :
+                  if hora.cerrado
+                    | Cerrado
+                  else
+                    | #{hora.abre} - #{hora.cierra}
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Valores agregados
+            .panel-body
+              each vagregado in negocios.vagregados
+                span.label.label-warning
+                  span.glyphicon.glyphicon-ok
+                  | &nbsp;#{vagregado}
+                | &nbsp;
+        .col-xs-12.col-sm-6.location-map
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Ubicación en el mapa
+            .panel-body
+              img.img-responsive.img-rounded(src="http://maps.googleapis.com/maps/api/staticmap?center=#{negocios.coords.lat},#{negocios.coords.lng}&zoom=17&size=400x350&sensor=false&markers=#{negocios.coords.lat},#{negocios.coords.lng}&scale=2")
+      .row
+        .col-xs-12
+          .panel.panel-primary.review-panel
+            .panel-heading
+              a.btn.btn-default.pull-right(href='/sitio/calificacion/nueva') Agregar notas
+              h2.panel-title Comentarios
+            .panel-body.review-container
+              each comentario in negocios.comentarios
+                .row
+                  .review
+                    .well.well-sm.review-header
+                      span.rating
+                        +outputRating()
+                      span.reviewAuthor #{comentario.autor}
+                      small.reviewTimestamp #{comentario.timestamp}
+                    .col-xs-12
+                      p !{(comentario.nota).replace(/\n/g, '<br/>')}
+    .col-xs-12.col-md-3
+      p.lead #{negocios.name} #{sidebar.context}
+      p= sidebar.callToAction
+
+

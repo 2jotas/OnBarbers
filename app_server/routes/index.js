@@ -6,8 +6,8 @@ var ctrlOtros = require('../controllers/otros');
 
 /* Locations pages */
 router.get('/', ctrlLugares.inicioLista);
-router.get('/lugar', ctrlLugares.infoLugar);
-router.get('/lugar/notas/nueva', ctrlLugares.addNota);
+router.get('/sitio', ctrlLugares.infoSitio);
+router.get('/sitio/calificacion/nueva', ctrlLugares.addCalificacion);
 
 /* Other pages */
 router.get('/nosotros', ctrlOtros.nosotros);
